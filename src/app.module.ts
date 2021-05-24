@@ -6,6 +6,9 @@ import { Connection } from 'typeorm';
 import { UsersModule } from './users/users.module';
 import { BoardModule } from './board/board.module';
 import { ListModule } from './list/list.module';
+import { CardService } from './card/card.service';
+import { CardController } from './card/card.controller';
+import { CardModule } from './card/card.module';
 
 @Module({
   imports: [
@@ -22,7 +25,8 @@ import { ListModule } from './list/list.module';
     }),
     UsersModule,
     BoardModule,
-    ListModule
+    ListModule,
+    CardModule
   ],
   controllers: [AppController],
   providers: [AppService],

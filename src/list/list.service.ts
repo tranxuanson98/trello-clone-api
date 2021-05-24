@@ -45,6 +45,4 @@ export class ListService {
         updateList.board = data;
         return await this.listRepository.save(updateList);
     }
-
-
 }
