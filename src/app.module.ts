@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { UsersModule } from './users/users.module';
 import { BoardModule } from './board/board.module';
+import { ListModule } from './list/list.module';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { BoardModule } from './board/board.module';
       autoLoadEntities: true
     }),
     UsersModule,
-    BoardModule
+    BoardModule,
+    ListModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Board } from './Board.entity';
+import { CreateBoardDto } from './dto/create-board.dto';
 
 @Injectable()
 export class BoardService {
@@ -24,11 +25,19 @@ export class BoardService {
         return await this.BoardRepository.remove(boardToRemove);
     }
 
-    async create(board: Board): Promise<Board> {
-        return await this.BoardRepository.save(board);
+    async create(board: CreateBoardDto): Promise<Board> {
+        var createBoard = new Board();
+        createBoard.id = board.id;
+        createBoard.name = board.name;
+        createBoard.status = board.status;
+        return await this.BoardRepository.save(createBoard);
     }
 
-    async update(board: Board): Promise<Board> {
-        return await this.BoardRepository.save(board);
+    async update(board: CreateBoardDto): Promise<Board> {
+        var createBoard = new Board();
+        createBoard.id = board.id;
+        createBoard.name = board.name;
+        createBoard.status = board.status;
+        return await this.BoardRepository.save(createBoard);
     }
 }
