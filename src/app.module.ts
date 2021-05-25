@@ -2,13 +2,10 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Connection } from 'typeorm';
-import { UsersModule } from './users/users.module';
 import { BoardModule } from './board/board.module';
 import { ListModule } from './list/list.module';
-import { CardService } from './card/card.service';
-import { CardController } from './card/card.controller';
 import { CardModule } from './card/card.module';
+import { UserModule } from './user/user.module'
 
 @Module({
   imports: [
@@ -23,14 +20,14 @@ import { CardModule } from './card/card.module';
       synchronize: true,
       autoLoadEntities: true
     }),
-    UsersModule,
     BoardModule,
     ListModule,
-    CardModule
+    CardModule,
+    UserModule
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {
-  constructor(private connection: Connection) { }
+  constructor() { }
 }

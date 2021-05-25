@@ -23,6 +23,9 @@ export class ListController {
 
     @Post()
     createList(@Body() createListDto: CreateListDto): Promise<List> {
+        console.log(456);
+        console.log(createListDto);
+        
         return this.listService.create(createListDto);
     }
 
