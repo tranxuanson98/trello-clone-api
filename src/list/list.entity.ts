@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { Board } from 'src/board/board.entity';
 import {Card} from 'src/card/card.entity'
+import { User } from 'src/user/user.entity';
 @Entity()
 export class List {
     @PrimaryGeneratedColumn('uuid')
@@ -16,4 +17,8 @@ export class List {
         cascade: true,
     })
     cards: Card[];
+    
+    @ManyToMany(() => User) 
+    @JoinTable()
+    users: User[];
 }

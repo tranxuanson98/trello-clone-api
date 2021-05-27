@@ -25,19 +25,21 @@ export class BoardService {
         return await this.BoardRepository.remove(boardToRemove);
     }
 
-    async create(board: CreateBoardDto): Promise<Board> {
+    async create(boardDto: CreateBoardDto): Promise<Board> {
         var createBoard = new Board();
-        createBoard.id = board.id;
-        createBoard.name = board.name;
-        createBoard.status = board.status;
+        createBoard.id = boardDto.id;
+        createBoard.name = boardDto.name;
+        createBoard.status = boardDto.status;
+        createBoard.users = [boardDto.user];
         return await this.BoardRepository.save(createBoard);
     }
 
-    async update(board: CreateBoardDto): Promise<Board> {
+    async update(boardDto: CreateBoardDto): Promise<Board> {
         var createBoard = new Board();
-        createBoard.id = board.id;
-        createBoard.name = board.name;
-        createBoard.status = board.status;
+        createBoard.id = boardDto.id;
+        createBoard.name = boardDto.name;
+        createBoard.status = boardDto.status;
+        createBoard.users = [boardDto.user];
         return await this.BoardRepository.save(createBoard);
     }
 }

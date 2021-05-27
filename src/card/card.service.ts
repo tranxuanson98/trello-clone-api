@@ -37,6 +37,7 @@ export class CardService {
         createCard.date = cardDto.date;
         const data = await this.listRepository.findOne(cardDto.listId);
         createCard.list = data;
+        createCard.users = [cardDto.user];
         return await this.cardRepository.save(createCard);
     }
 
@@ -48,6 +49,7 @@ export class CardService {
         updateCard.date = cardDto.date;
         const data = await this.listRepository.findOne(cardDto.listId);
         updateCard.list = data;
+        updateCard.users = [cardDto.user];
         return await this.cardRepository.save(updateCard);
     }
 }

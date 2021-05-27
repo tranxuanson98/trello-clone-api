@@ -18,6 +18,7 @@ export class UserController {
 
     @Post('register')
     async register(@Body() registerDto: RegisterDto): Promise<User> {
+        //hash password by bcrypt
         registerDto.password = await bcrypt.hash(registerDto.password, 12);
         const user = await this.userService.create(registerDto);
 

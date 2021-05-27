@@ -1,6 +1,7 @@
+import { Comments } from "src/comments/comments.entity";
 import { List } from "src/list/list.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-
+import { User } from "src/user/user.entity";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 @Entity()
 export class Card {
     @PrimaryGeneratedColumn('uuid')
@@ -17,4 +18,13 @@ export class Card {
 
     @ManyToOne(() => List, list => list.cards)
     list: List;
+
+    @OneToMany(() => Comments, comment => comment.card, {
+        cascade: true,
+    })
+    comments: Comments[];
+
+    @ManyToMany(() => User)
+    @JoinTable()
+    users: User[];
 }
