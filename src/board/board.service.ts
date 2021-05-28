@@ -27,7 +27,6 @@ export class BoardService {
 
     async create(boardDto: CreateBoardDto): Promise<Board> {
         var createBoard = new Board();
-        createBoard.id = boardDto.id;
         createBoard.name = boardDto.name;
         createBoard.status = boardDto.status;
         createBoard.users = [boardDto.user];

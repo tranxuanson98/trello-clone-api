@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Activity } from "src/activity/activity.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -13,4 +14,8 @@ export class User {
 
     @Column()
     password: string;
+
+    @OneToMany(() => Activity, activities => activities.user)
+    activities: Activity[]
+
 }
