@@ -7,10 +7,12 @@ import { Board } from 'src/board/board.entity';
 import { User } from 'src/user/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
+import { Activity } from 'src/activity/activity.entity';
+import { ObjectActivity } from 'src/objectActivity/object-activity.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([List,Board,User]),
+        TypeOrmModule.forFeature([List,Board,User,Activity,ObjectActivity]),
         JwtModule.register({
             secret: 'secret',
             signOptions: { expiresIn: '1d' }

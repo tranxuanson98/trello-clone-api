@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Activity } from 'src/activity/activity.entity';
+import { typeActivity } from 'src/objectActivity/dto/object-activity.dto';
+import { ObjectActivity } from 'src/objectActivity/object-activity.entity';
 import { Repository } from 'typeorm';
 import { Board } from './Board.entity';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -10,6 +13,11 @@ export class BoardService {
         @InjectRepository(Board)
         private BoardRepository: Repository<Board>,
 
+        @InjectRepository(Activity)
+        private ActivityRepository: Repository<Activity>,
+
+        @InjectRepository(ObjectActivity)
+        private ObjectRepository: Repository<ObjectActivity>,
     ) { }
 
     findAll(): Promise<Board[]> {
@@ -26,15 +34,24 @@ export class BoardService {
     }
 
     async create(boardDto: CreateBoardDto): Promise<Board> {
-        var createBoard = new Board();
+        const createBoard = new Board();
         createBoard.name = boardDto.name;
         createBoard.status = boardDto.status;
         createBoard.users = [boardDto.user];
-        return await this.BoardRepository.save(createBoard);
+        const savedBoard = await this.BoardRepository.save(createBoard);
+        const createOb = new ObjectActivity();
+        createOb.typeActivity = typeActivity.board;
+        createOb.typeId = savedBoard.id;
+        const savedObj = await this.ObjectRepository.save(createOb);
+        const createActivity = new Activity();
+        createActivity.objectActivity = savedObj;
+        createActivity.user = boardDto.user;
+        await this.ActivityRepository.save(createActivity);
+        return savedBoard;
     }
 
     async update(boardDto: CreateBoardDto): Promise<Board> {
-        var createBoard = new Board();
+        const createBoard = new Board();
         createBoard.id = boardDto.id;
         createBoard.name = boardDto.name;
         createBoard.status = boardDto.status;

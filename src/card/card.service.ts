@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Activity } from 'src/activity/activity.entity';
 import { List } from 'src/list/list.entity';
+import { typeActivity } from 'src/objectActivity/dto/object-activity.dto';
+import { ObjectActivity } from 'src/objectActivity/object-activity.entity';
 import { Repository } from 'typeorm';
 import { Card } from './card.entity';
 import { CreateCardDto } from './dto/card.dto';
@@ -13,7 +16,13 @@ export class CardService {
 
         @InjectRepository(List)
         private listRepository: Repository<List>,
-    ){
+
+        @InjectRepository(Activity)
+        private ActivityRepository: Repository<Activity>,
+
+        @InjectRepository(ObjectActivity)
+        private ObjectRepository: Repository<ObjectActivity>,
+    ) {
 
     }
 
@@ -38,7 +47,16 @@ export class CardService {
         const data = await this.listRepository.findOne(cardDto.listId);
         createCard.list = data;
         createCard.users = [cardDto.user];
-        return await this.cardRepository.save(createCard);
+        const savedCard = await this.cardRepository.save(createCard);
+        const createOb = new ObjectActivity();
+        createOb.typeActivity = typeActivity.card;
+        createOb.typeId = savedCard.id;
+        const savedObj = await this.ObjectRepository.save(createOb);
+        const createActivity = new Activity();
+        createActivity.objectActivity = savedObj;
+        createActivity.user = cardDto.user;
+        await this.ActivityRepository.save(createActivity);
+        return savedCard;
     }
 
     async update(cardDto: CreateCardDto): Promise<Card> {

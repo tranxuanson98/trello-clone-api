@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
+import { Activity } from 'src/activity/activity.entity';
 import { Board } from 'src/board/board.entity';
+import { typeActivity } from 'src/objectActivity/dto/object-activity.dto';
+import { ObjectActivity } from 'src/objectActivity/object-activity.entity';
 import { User } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
 import { CreateListDto } from './dto/create-list.dto';
@@ -16,6 +19,12 @@ export class ListService {
 
         @InjectRepository(Board)
         private boardRepository: Repository<Board>,
+
+        @InjectRepository(Activity)
+        private ActivityRepository: Repository<Activity>,
+
+        @InjectRepository(ObjectActivity)
+        private ObjectRepository: Repository<ObjectActivity>,
 
     ) { }
 
@@ -38,7 +47,16 @@ export class ListService {
         const boardOfList = await this.boardRepository.findOne(listDto.boardId);
         createList.board = boardOfList;        
         createList.users = [listDto.user];
-        return await this.listRepository.save(createList);
+        const savedList = await this.listRepository.save(createList)
+        const createOb = new ObjectActivity();
+        createOb.typeActivity = typeActivity.list;
+        createOb.typeId = savedList.id;
+        const savedObj = await this.ObjectRepository.save(createOb);
+        const createActivity = new Activity();
+        createActivity.objectActivity = savedObj;
+        createActivity.user = listDto.user;
+        await this.ActivityRepository.save(createActivity);
+        return savedList;
     }
 
     async update(listDto: CreateListDto): Promise<List> {

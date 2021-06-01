@@ -1,7 +1,9 @@
+import { ObjectActivity } from "src/objectActivity/object-activity.entity";
 import { User } from "src/user/user.entity";
 
 export class CreateActivityDto {
     readonly id: string;
-    readonly description: string;
-    user: User;   
+    description: string;
+    user: User;
+    objectActivity: ObjectActivity;
 }

@@ -36,7 +36,7 @@ export class ActivityController {
             createActivitydDto.user = user;
             delete createActivitydDto.user.password;
             return this.activityService.create(createActivitydDto);
-        }catch (e) {
+        } catch (e) {
             throw new UnauthorizedException();
         }
     }
@@ -44,7 +44,7 @@ export class ActivityController {
     @Put()
     async updateActivity(@Body() createActivitydDto: CreateActivityDto, @Req() request: Request): Promise<Activity> {
         try {
-            if(!createActivitydDto.id){
+            if (!createActivitydDto.id) {
                 throw new NotFoundException();
             }
             const cookie = request.cookies['jwt'];
@@ -56,9 +56,8 @@ export class ActivityController {
             createActivitydDto.user = user;
             delete createActivitydDto.user.password;
             return this.activityService.update(createActivitydDto);
-        }catch (e) {
+        } catch (e) {
             throw new UnauthorizedException();
         }
     }
-
 }

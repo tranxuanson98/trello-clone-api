@@ -26,7 +26,6 @@ export class ActivityService {
 
     async create(activityDto: CreateActivityDto): Promise<Activity> {
         var createActivity = new Activity();
-        createActivity.description = activityDto.description;
         createActivity.user = activityDto.user;
         return await this.activityRepository.save(createActivity);
     }
@@ -34,7 +33,6 @@ export class ActivityService {
     async update(activityDto: CreateActivityDto): Promise<Activity> {
         var createActivity = new Activity();
         createActivity.id = activityDto.id;
-        createActivity.description = activityDto.description;
         createActivity.user = activityDto.user;
         return await this.activityRepository.save(createActivity);
     }

@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Activity } from 'src/activity/activity.entity';
 import { Card } from 'src/card/card.entity';
+import { typeActivity } from 'src/objectActivity/dto/object-activity.dto';
+import { ObjectActivity } from 'src/objectActivity/object-activity.entity';
 import { Repository } from 'typeorm';
 import { Comments } from './comments.entity';
 import { CreateCommentDto } from './dto/comments.dto'
@@ -13,10 +16,16 @@ export class CommentsService {
 
         @InjectRepository(Card)
         private cardRepository: Repository<Card>,
+
+        @InjectRepository(Activity)
+        private ActivityRepository: Repository<Activity>,
+
+        @InjectRepository(ObjectActivity)
+        private ObjectRepository: Repository<ObjectActivity>,
     ) {
 
     }
-    
+
     findAll(): Promise<Comments[]> {
         return this.commentsRepository.find();
     }
@@ -37,7 +46,16 @@ export class CommentsService {
         const data = await this.cardRepository.findOne(commentDto.cardId);
         createComment.card = data;
         createComment.users = [commentDto.user];
-        return await this.cardRepository.save(createComment);
+        const savedComment = await this.cardRepository.save(createComment)
+        const createOb = new ObjectActivity();
+        createOb.typeActivity = typeActivity.comment;
+        createOb.typeId = savedComment.id;
+        const savedObj = await this.ObjectRepository.save(createOb);
+        const createActivity = new Activity();
+        createActivity.objectActivity = savedObj;
+        createActivity.user = commentDto.user;
+        await this.ActivityRepository.save(createActivity);
+        return savedComment;
     }
 
     async update(commentDto: CreateCommentDto): Promise<Comments> {
